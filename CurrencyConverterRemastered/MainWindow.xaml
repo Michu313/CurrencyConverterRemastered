@@ -5,37 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CurrencyConverterRemastered"
         mc:Ignorable="d"
-        Title="Konwerter Walut" VerticalAlignment="Center" Height="360" Width="620">
-    <StackPanel HorizontalAlignment="Center">
-        <StackPanel Orientation="Horizontal" Margin="10,5,5,5">
-            <Label x:Name="labeCourseUsd" Content="USD = " Margin="10" Width="100" FontSize="14"/>
-            <Label x:Name="labeCourseEur" Content="EUR = " Margin="30,10,10,10" Width="100" FontSize="14"/>
-            <Label x:Name="labeCourseGbp" Content="GBP = " Margin="30,10,10,10" Width="100" FontSize="14"/>
-            <Label x:Name="labeCourseChf" Content="CHF = " Margin="30,10,10,10" Width="100" FontSize="14"/>
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="12,0,10,0" >
-            <Label x:Name="label1" Content="Wprowadź kwotę do przeliczenia:" Margin="10" Width="200" FontSize="14"/>
-            <TextBox x:Name="textBox1" Height="23" TextWrapping="Wrap" Text="" Width="120" Margin="10" />
-            <ComboBox x:Name="comboBox1" Width="210" Margin="10" Height="30" HorizontalAlignment="Center" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="10,0" >
-            <Label x:Name="label2" Content="Kwota po przeliczeniu:" Margin="10" Width="200" FontSize="14"/>
-            <TextBox x:Name="textBox2" Height="23" TextWrapping="Wrap" Text="" Width="120" Margin="10" />
-            <ComboBox x:Name="comboBox2" Width="210" Margin="10" Height="30" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="10,10,10,5" HorizontalAlignment="Right"  >
-            <Button x:Name="button" Content="Przelicz" FontSize="14"  Margin="5,0" Height="30" Width="572" Click="Button_ClickPrzelicz" HorizontalAlignment="Center" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" Margin="10,0" >
-            <Button x:Name="BStatistic" Content="Historia kursów walut" Width="572" Height="30" FontSize="14"  Margin="5,0" HorizontalAlignment="Center"/>
-        </StackPanel>    
-        <GroupBox x:Name="groupBox" Header="Połączenie z siecią" Height="70" Margin="10,0">
-            <StackPanel Orientation="Horizontal" Margin="0,-4,-2,2" Height="50" VerticalAlignment="Bottom">
-                <Ellipse x:Name="control" HorizontalAlignment="Left" Height="14"  Width="14" Margin="5,5,0,5" Fill="#FFE80808"/>
-                <Label x:Name="connection" Content="Online" Margin="5" FontSize="14"/>
-                <Button x:Name="BRefresh" Content="Odśwież" Margin="10,5,0,5" FontSize="14"  Height="30" Width="70"/>
-                <Label x:Name="OfflineDataCurrency" Content="Kursy walut z dnia: " Width="373" Margin="10,10,0,5" FontSize="14"/>
-            </StackPanel>
-        </GroupBox>
-    </StackPanel>
+        Title="Konwerter Walut" VerticalAlignment="Center" Height="400" Width="640">
+    <Frame x:Name="MainFrame" HorizontalAlignment="Left" Height="360"  VerticalAlignment="Top" Width="640" NavigationUIVisibility="Hidden"/>
+
 </Window>
