@@ -27,7 +27,7 @@ namespace CurrencyConverterRemastered
             InitializeComponent();
             Default();
             Helpers.FillComboBox(currentExchangeRates, ref comboBox, false);
-            comboBox.SelectedIndex = 8;
+            comboBox.SelectedIndex = 7;
         }
 
         void Default()
@@ -40,6 +40,11 @@ namespace CurrencyConverterRemastered
             textBlock11.Text = currencyStatistics.Average().ToString();
             textBlock12.Text = currencyStatistics.HighestValue().ToString();
             textBlock13.Text = currencyStatistics.LowestValue().ToString();
+            textBlock14.Text = currencyStatistics.LongestSeriesOfGrowth().ToString() + " dni";
+            textBlock15.Text = currencyStatistics.LongestSeriesOfInheritance().ToString() + " dni";
+            textBlock16.Text = currencyStatistics.BiggestIncrease().ToString();
+            textBlock17.Text = currencyStatistics.BiggestDrop().ToString();
+            
         }
 
         void GetStatistic(string name, int quantity)
@@ -63,14 +68,21 @@ namespace CurrencyConverterRemastered
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (Helpers.ValidationTextBoxForStatistic(textBox.Text))
+            if (Helpers.CheckConnectInternet())
             {
-                GetStatistic(Helpers.GetShortName(comboBox.Text, currentExchangeRates), Int32.Parse(textBox.Text));
+                if (Helpers.ValidationTextBoxForStatistic(textBox.Text))
+                    GetStatistic(Helpers.GetShortName(comboBox.Text, currentExchangeRates), Int32.Parse(textBox.Text));
+                else
+                {
+                    MessageBox.Show("Pole puste lub złą wprowadzona liczba, możliwe liczby od 10 do 255", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Clear();
+                }
             }
             else
             {
-                MessageBox.Show("Pole puste lub złą wprowadzona liczba, możliwe liczby od 10 do 255", "Błąd", MessageBoxButton.OK, MessageBoxImage.Warning);
-                Clear();
+                Helpers.ErrorInternet();
+                MessageBox.Show("Brak internetu. Nastąpi przejście do głównego okna aplikacji.", "Problemy z internetem", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.NavigationService.Navigate(new CurrentConvertPage());
             }
         }
 
@@ -85,6 +97,11 @@ namespace CurrencyConverterRemastered
             textBlock15.Text = "";
             textBlock16.Text = "";
             textBlock17.Text = "";
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.NavigationService.Navigate(new CurrentConvertPage());
         }
     }
 }

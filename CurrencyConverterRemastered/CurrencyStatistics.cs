@@ -60,6 +60,79 @@ namespace CurrencyConverterRemastered
             return Math.Round(tmp, 4);
         }
 
+        public int LongestSeriesOfGrowth()
+        {
+            int i = 0;
+            List<int> list = new List<int>();
+            foreach (var item in OneCurrencyForStatistics)
+            {
+                if (item.Change > 0)
+                    i++;
+                else
+                {
+                    list.Add(i);
+                    i = 0;
+                }
+            }
+            i = 0;
+            foreach (var item in list)
+            {
+                if (i < item)
+                    i = item;
+            }
+            return i;
+        }
+
+        public int LongestSeriesOfInheritance()
+        {
+            int i = 0;
+            List<int> list = new List<int>();
+            foreach (var item in OneCurrencyForStatistics)
+            {
+                if (item.Change < 0)
+                    i++;
+                else
+                {
+                    list.Add(i);
+                    i = 0;
+                }
+            }
+            i = 0;
+            foreach (var item in list)
+            {
+                if (i < item)
+                    i = item;
+            }
+            return i;
+        }
+
+        public double BiggestDrop()
+        {
+            double tmp = 1000;
+            foreach (var item in OneCurrencyForStatistics)
+            {
+                if (item.Change < tmp)
+                {
+                    tmp = item.Change;
+                }
+            }
+            return Math.Round(tmp, 4);
+        }
+
+        public double BiggestIncrease()
+        {
+            double tmp = 0;
+            foreach (var item in OneCurrencyForStatistics)
+            {
+                if (item.Change > tmp)
+                {
+                    tmp = item.Change;
+                }
+            }
+            return Math.Round(tmp, 4);
+        }
+
+
         private List<OneCurrency> GetListOneCurrencies(string name, int quantity)
         {
             var client = new WebClient
@@ -89,17 +162,18 @@ namespace CurrencyConverterRemastered
             {
                 if (firstItem!=true)
                 {
-                    list.Add(new Model.OneCurrencyForStatistics(name, item.effectiveDate, item.mid, Math.Round(tmp-item.mid, 4), Helpers.GetImageToList(tmp-item.mid)));
-                    tmp = item.mid;
+                    list.Add(new Model.OneCurrencyForStatistics(name, Helpers.ReversDate(item.effectiveDate), Math.Round(item.mid,4), Math.Round(item.mid-tmp, 4), Helpers.GetImageToList(item.mid-tmp)));
+                    tmp = Math.Round(item.mid, 4);
                 }
                 else
                 {
-                    list.Add(new Model.OneCurrencyForStatistics(name, item.effectiveDate, item.mid, 0, "/Image/image2.png"));
-                    tmp = item.mid;
+                    list.Add(new Model.OneCurrencyForStatistics(name, Helpers.ReversDate(item.effectiveDate), Math.Round(item.mid, 4), 0, "/Image/image2.png"));
+                    tmp = Math.Round(item.mid, 4);
                     firstItem = false;
                 }
             }
             return list;
         }
+
     }
 }

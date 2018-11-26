@@ -18,8 +18,8 @@ namespace CurrencyConverterRemastered
 
         public CurrentExchangeRates()
         {
-            this.Currencies = GetListCurrency();
-            this.CurrencieNames = GetListCurrencyNames();
+                this.Currencies = GetListCurrency();
+                this.CurrencieNames = GetListCurrencyNames();
         }
 
         public double GetCourse(string nameCurrency)
@@ -31,7 +31,7 @@ namespace CurrencyConverterRemastered
         
         private List<CurrencieName> GetListCurrencyNames()
         {
-            var list = GetListCurrency();
+            var list = Currencies;
             List<CurrencieName> list2 = new List<CurrencieName>();
             foreach (var item in list)
             {

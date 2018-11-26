@@ -13,7 +13,7 @@
             <StackPanel Orientation="Horizontal" Height="50" VerticalAlignment="Top" Margin="20,0,0,0">
                 <TextBlock x:Name="textBlock" TextWrapping="Wrap" Text="Wybierz walutę: " HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0,10,0" FontSize="14"/>
                 <ComboBox x:Name="comboBox" HorizontalAlignment="Center" Width="220" Margin="0,5" FontSize="14" Height="30"/>
-                <TextBox x:Name="textBox" ToolTip="Liczby od 10-255" TextWrapping="Wrap" Text="" Width="120" Margin="10,5,0,5" FontSize="14" Height="25" PreviewTextInput="NumberValidationTextBox"/>
+                <TextBox x:Name="textBox" ToolTip="Liczby od 10-255" TextWrapping="Wrap" Text="10" Width="120" Margin="10,5,0,5" FontSize="14" Height="25" PreviewTextInput="NumberValidationTextBox"/>
                 <Button x:Name="button" Content="Sprawdź" Width="120" VerticalAlignment="Center" Height="30" FontSize="14" Margin="10,5,0,5" HorizontalAlignment="Center" Click="Button_Click"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Height="300">
@@ -23,8 +23,8 @@
                             <GridView.Columns>
                                 <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Nazwa" Width="140" ></GridViewColumn>
                                 <GridViewColumn DisplayMemberBinding="{Binding Date}" Header="Data" Width="120"></GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Cena" Width="120"></GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding Change}" Header="Zmiana" Width="120"></GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Price}" Header="Cena(zł)" Width="120"></GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Change}" Header="Zmiana(zł)" Width="120"></GridViewColumn>
                                 <GridViewColumn Header="Zm."  Width="60">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -64,6 +64,9 @@
                         </StackPanel>
                     </Grid>
                 </GroupBox>
+            </StackPanel>
+            <StackPanel>
+                <Button x:Name="button1" Content="Wstecz" Margin="5,10" Click="BackButton_Click"/>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

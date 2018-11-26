@@ -90,5 +90,36 @@ namespace CurrencyConverterRemastered
             }
             return "EUR";
         }
+
+        public static bool CheckConnectInternet()
+        {
+            try
+            {
+                using (var client = new System.Net.WebClient())
+                {
+                    using (var stream = client.OpenRead("http://api.nbp.pl"))
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        public static void ErrorInternet()
+        {
+            System.Windows.MessageBox.Show("Problem z internetem. Sprawdź połączenie z internetem", "Brak internetu", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+        }
+
+        public static string ReversDate(string tmp)
+        {
+            string tmp1 = tmp[0] + "" + tmp[1] + "" + tmp[2] + "" + tmp[3];
+            string tmp2 = tmp[5] + "" + tmp[6];
+            string tmp3 = tmp[8] + "" + tmp[9];
+            return tmp3 + "-" + tmp2 + "-" + tmp1;
+        }
     }
 }

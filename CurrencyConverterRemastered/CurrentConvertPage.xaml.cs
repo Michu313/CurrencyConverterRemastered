@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +22,7 @@ namespace CurrencyConverterRemastered
     /// </summary>
     public partial class CurrentConvertPage : Page
     {
-        CurrentExchangeRates currentExchangeRates = new CurrentExchangeRates();
+        CurrentExchangeRates currentExchangeRates;
         public CurrentConvertPage()
         {
             InitializeComponent();
@@ -29,14 +31,24 @@ namespace CurrencyConverterRemastered
 
         private void CompletAll()
         {
-            labeCourseUsd.Content = labeCourseUsd.Content + "" + Math.Round(currentExchangeRates.GetCourse("USD"), 2) + "zł";
-            labeCourseEur.Content = labeCourseEur.Content + "" + Math.Round(currentExchangeRates.GetCourse("EUR"), 2) + "zł";
-            labeCourseGbp.Content = labeCourseGbp.Content + "" + Math.Round(currentExchangeRates.GetCourse("GBP"), 2) + "zł";
-            labeCourseChf.Content = labeCourseChf.Content + "" + Math.Round(currentExchangeRates.GetCourse("CHF"), 2) + "zł";
-            Helpers.FillComboBox(currentExchangeRates, ref comboBox1, true);
-            Helpers.FillComboBox(currentExchangeRates, ref comboBox2, true);
-            comboBox1.SelectedIndex = 0;
-            comboBox2.SelectedIndex = 1;
+            if (Helpers.CheckConnectInternet())
+            {
+                currentExchangeRates = new CurrentExchangeRates();
+                labeCourseUsd.Content = labeCourseUsd.Content + "" + Math.Round(currentExchangeRates.GetCourse("USD"), 2) + "zł";
+                labeCourseEur.Content = labeCourseEur.Content + "" + Math.Round(currentExchangeRates.GetCourse("EUR"), 2) + "zł";
+                labeCourseGbp.Content = labeCourseGbp.Content + "" + Math.Round(currentExchangeRates.GetCourse("GBP"), 2) + "zł";
+                labeCourseChf.Content = labeCourseChf.Content + "" + Math.Round(currentExchangeRates.GetCourse("CHF"), 2) + "zł";
+                Helpers.FillComboBox(currentExchangeRates, ref comboBox1, true);
+                Helpers.FillComboBox(currentExchangeRates, ref comboBox2, true);
+                comboBox1.SelectedIndex = 0;
+                comboBox2.SelectedIndex = 1;
+                control.Fill = Brushes.Green;
+            }
+            else
+            {
+                Helpers.ErrorInternet();
+                control.Fill = Brushes.Red;
+            }
         }
 
 
@@ -45,21 +57,27 @@ namespace CurrencyConverterRemastered
             if (Helpers.CheckTextBox(textBox1.Text))
             {
                 textBox2.Text = "";
-                if (Helpers.GetShortName(comboBox1.Text) == "PLN")
+                if (comboBox1.Text==comboBox2.Text)
+                    textBox2.AppendText(textBox1.Text);
+                else
                 {
-                    double a = (1 / currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox2.Text))) * Convert.ToDouble(textBox1.Text);
-                    textBox2.AppendText((Math.Round(a, 2)).ToString());
+                    if (Helpers.GetShortName(comboBox1.Text) == "PLN")
+                    {
+                        double a = (1 / currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox2.Text))) * Convert.ToDouble(textBox1.Text);
+                        textBox2.AppendText((Math.Round(a, 2)).ToString());
+                    }
+                    if (Helpers.GetShortName(comboBox2.Text) == "PLN")
+                    {
+                        double a = ((currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox1.Text))) * (Convert.ToDouble(textBox1.Text)));
+                        textBox2.AppendText((Math.Round(a, 2)).ToString());
+                    }
+                    if (Helpers.GetShortName(comboBox2.Text) != "PLN" && Helpers.GetShortName(comboBox1.Text) != "PLN")
+                    {
+                        double a = (currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox1.Text))) * (currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox2.Text)));
+                        textBox2.AppendText((Math.Round(a, 2)).ToString());
+                    }
                 }
-                if (Helpers.GetShortName(comboBox2.Text) == "PLN")
-                {
-                    double a = ((currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox1.Text))) * (Convert.ToDouble(textBox1.Text)));
-                    textBox2.AppendText((Math.Round(a, 2)).ToString());
-                }
-                if (Helpers.GetShortName(comboBox2.Text) != "PLN" && Helpers.GetShortName(comboBox1.Text) != "PLN")
-                {
-                    double a = (currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox1.Text))) * (currentExchangeRates.GetCourse(Helpers.GetShortName(comboBox2.Text)));
-                    textBox2.AppendText((Math.Round(a, 2)).ToString());
-                }
+                
             }
             else
             {
@@ -71,12 +89,29 @@ namespace CurrencyConverterRemastered
 
         private void Button_ClickPrzelicz(object sender, RoutedEventArgs e)
         {
-            ConvertOnline();
+            if (Helpers.CheckConnectInternet())
+                ConvertOnline();
+            else
+            {
+                Helpers.ErrorInternet();
+                CompletAll();
+            }
         }
 
         private void BStatistic_Click(object sender, RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new StatisticPage());
+            if (Helpers.CheckConnectInternet())
+                this.NavigationService.Navigate(new StatisticPage());
+            else
+            {
+                Helpers.ErrorInternet();
+                CompletAll();
+            }
+        }
+
+        private void BRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            CompletAll();
         }
     }
 }

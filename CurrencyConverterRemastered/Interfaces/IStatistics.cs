@@ -11,7 +11,10 @@ namespace CurrencyConverterRemastered.Interfaces
         double Average();
         double LowestValue();
         double HighestValue();
-        
+        int LongestSeriesOfGrowth();
+        int LongestSeriesOfInheritance();
+        double BiggestDrop();
+        double BiggestIncrease();
 
     }
 }
