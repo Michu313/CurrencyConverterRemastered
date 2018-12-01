@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CurrencyConverterRemastered.Offline;
 
 namespace CurrencyConverterRemastered
 {
@@ -23,6 +24,7 @@ namespace CurrencyConverterRemastered
     public partial class CurrentConvertPage : Page
     {
         CurrentExchangeRates currentExchangeRates;
+        bool OfflineMode;
         public CurrentConvertPage()
         {
             InitializeComponent();
@@ -33,21 +35,34 @@ namespace CurrencyConverterRemastered
         {
             if (Helpers.CheckConnectInternet())
             {
-                currentExchangeRates = new CurrentExchangeRates();
-                labeCourseUsd.Content = labeCourseUsd.Content + "" + Math.Round(currentExchangeRates.GetCourse("USD"), 2) + "zł";
-                labeCourseEur.Content = labeCourseEur.Content + "" + Math.Round(currentExchangeRates.GetCourse("EUR"), 2) + "zł";
-                labeCourseGbp.Content = labeCourseGbp.Content + "" + Math.Round(currentExchangeRates.GetCourse("GBP"), 2) + "zł";
-                labeCourseChf.Content = labeCourseChf.Content + "" + Math.Round(currentExchangeRates.GetCourse("CHF"), 2) + "zł";
+                currentExchangeRates = new CurrentExchangeRates(true);
+                labeCourseUsd.Content = "USD = " + Math.Round(currentExchangeRates.GetCourse("USD"), 2) + "zł";
+                labeCourseEur.Content = "EUR = " + Math.Round(currentExchangeRates.GetCourse("EUR"), 2) + "zł";
+                labeCourseGbp.Content = "GBP = " + Math.Round(currentExchangeRates.GetCourse("GBP"), 2) + "zł";
+                labeCourseChf.Content = "CHF = " + Math.Round(currentExchangeRates.GetCourse("CHF"), 2) + "zł";
                 Helpers.FillComboBox(currentExchangeRates, ref comboBox1, true);
                 Helpers.FillComboBox(currentExchangeRates, ref comboBox2, true);
                 comboBox1.SelectedIndex = 0;
                 comboBox2.SelectedIndex = 1;
+                OfflineDataCurrency.Content = "";
                 control.Fill = Brushes.Green;
+                ReadAndWriteJson.WriteJson();
+                OfflineMode = false;
             }
             else
             {
-                Helpers.ErrorInternet();
+                currentExchangeRates = new CurrentExchangeRates(false);
+                labeCourseUsd.Content = "USD = " + Math.Round(currentExchangeRates.GetCourse("USD"), 2) + "zł";
+                labeCourseEur.Content = "EUR = " + Math.Round(currentExchangeRates.GetCourse("EUR"), 2) + "zł";
+                labeCourseGbp.Content = "GBP = " + Math.Round(currentExchangeRates.GetCourse("GBP"), 2) + "zł";
+                labeCourseChf.Content = "CHF = " + Math.Round(currentExchangeRates.GetCourse("CHF"), 2) + "zł";
+                Helpers.FillComboBox(currentExchangeRates, ref comboBox1, true);
+                Helpers.FillComboBox(currentExchangeRates, ref comboBox2, true);
+                comboBox1.SelectedIndex = 0;
+                comboBox2.SelectedIndex = 1;
+                OfflineDataCurrency.Content = "Kursy walut z dnia: " + currentExchangeRates.Data;
                 control.Fill = Brushes.Red;
+                OfflineMode = true;
             }
         }
 
@@ -89,12 +104,18 @@ namespace CurrencyConverterRemastered
 
         private void Button_ClickPrzelicz(object sender, RoutedEventArgs e)
         {
-            if (Helpers.CheckConnectInternet())
+            if (OfflineMode)
                 ConvertOnline();
             else
             {
-                Helpers.ErrorInternet();
-                CompletAll();
+                if (Helpers.CheckConnectInternet())
+                    ConvertOnline();
+                else
+                {
+                    Helpers.ErrorInternet();
+                    OfflineMode = true;
+                    CompletAll();
+                }
             }
         }
 

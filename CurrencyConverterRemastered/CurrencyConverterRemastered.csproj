@@ -63,7 +63,9 @@
       <DependentUpon>CurrentConvertPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces\IStatistics.cs" />
+    <Compile Include="Model\CurrencyOffline.cs" />
     <Compile Include="Model\OneCurrencyForStatistics.cs" />
+    <Compile Include="Offline\ReadAndWriteJson.cs" />
     <Compile Include="StatisticPage.xaml.cs">
       <DependentUpon>StatisticPage.xaml</DependentUpon>
     </Compile>
@@ -111,6 +113,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="Offline\CourseOffline.json" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

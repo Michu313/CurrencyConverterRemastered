@@ -1,5 +1,6 @@
 ﻿using CurrencyConverterRemastered.Interfaces;
 using CurrencyConverterRemastered.Model;
+using CurrencyConverterRemastered.Offline;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -12,14 +13,24 @@ namespace CurrencyConverterRemastered
 {
     class CurrentExchangeRates : ICourse
     {
-        private bool Internetstatus { get; set; }
+        public string Data { get; set; }
         public List<Currency> Currencies { get; set; }
         public List<CurrencieName> CurrencieNames { get; set; }
 
-        public CurrentExchangeRates()
+        public CurrentExchangeRates(bool connection)
         {
-                this.Currencies = GetListCurrency();
+            if (connection)
+            {
+                this.Currencies = GetListCurrency(true);
                 this.CurrencieNames = GetListCurrencyNames();
+            }
+            else
+            {
+                this.Data = GetDate();
+                this.Currencies = GetListCurrency(false);
+                this.CurrencieNames = GetListCurrencyNames();
+            }
+                
         }
 
         public double GetCourse(string nameCurrency)
@@ -40,13 +51,23 @@ namespace CurrencyConverterRemastered
             return list2;
         }
 
-        private List<Currency> GetListCurrency()
+        private List<Currency> GetListCurrency(bool connection)
         {
-            var client = new WebClient
+            string text="";
+            if (connection)
             {
-                Encoding = Encoding.UTF8
-            };
-            var text = client.DownloadString("http://api.nbp.pl/api/exchangerates/tables/a/?format=json");
+                var client = new WebClient
+                {
+                    Encoding = Encoding.UTF8
+                };
+
+                text = client.DownloadString("http://api.nbp.pl/api/exchangerates/tables/a/?format=json");
+            }
+            else
+            {
+                text = ReadAndWriteJson.ReadJson();
+            }
+            
             text = text.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
             JObject serch = JObject.Parse(text);
             IList<JToken> results = serch["rates"].Children().ToList();
@@ -58,6 +79,14 @@ namespace CurrencyConverterRemastered
                 searchResults.Add(searchResult);
             }
             return searchResults;
+        }
+        
+        private string GetDate()
+        {
+            var text = ReadAndWriteJson.ReadJson();
+            text = text.TrimStart(new char[] { '[' }).TrimEnd(new char[] { ']' });
+            JObject serch = JObject.Parse(text);
+            return Helpers.ReversDate(serch["effectiveDate"].ToString());
         }
     }
 }

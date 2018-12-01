@@ -21,7 +21,7 @@ namespace CurrencyConverterRemastered
     /// </summary>
     public partial class StatisticPage : Page
     {
-        CurrentExchangeRates currentExchangeRates = new CurrentExchangeRates();
+        CurrentExchangeRates currentExchangeRates = new CurrentExchangeRates(true);
         public StatisticPage()
         {
             InitializeComponent();
@@ -32,7 +32,7 @@ namespace CurrencyConverterRemastered
 
         void Default()
         {
-            CurrencyStatistics currencyStatistics = new CurrencyStatistics("EUR", 40);
+            CurrencyStatistics currencyStatistics = new CurrencyStatistics("", 40);
             foreach (var item in currencyStatistics.OneCurrencyForStatistics)
             {
                 listView.Items.Add(item);
@@ -58,6 +58,10 @@ namespace CurrencyConverterRemastered
             textBlock11.Text = currencyStatistics.Average().ToString();
             textBlock12.Text = currencyStatistics.HighestValue().ToString();
             textBlock13.Text = currencyStatistics.LowestValue().ToString();
+            textBlock14.Text = currencyStatistics.LongestSeriesOfGrowth().ToString() + " dni";
+            textBlock15.Text = currencyStatistics.LongestSeriesOfInheritance().ToString() + " dni";
+            textBlock16.Text = currencyStatistics.BiggestIncrease().ToString();
+            textBlock17.Text = currencyStatistics.BiggestDrop().ToString();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
