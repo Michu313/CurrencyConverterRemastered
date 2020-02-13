@@ -25,32 +25,16 @@ namespace CurrencyConverterRemastered
         public StatisticPage()
         {
             InitializeComponent();
-            Default();
+            GetStatistic("EUR", 40);
             Helpers.FillComboBox(currentExchangeRates, ref comboBox, false);
             comboBox.SelectedIndex = 7;
-        }
-
-        void Default()
-        {
-            CurrencyStatistics currencyStatistics = new CurrencyStatistics("", 40);
-            foreach (var item in currencyStatistics.OneCurrencyForStatistics)
-            {
-                listView.Items.Add(item);
-            }
-            textBlock11.Text = currencyStatistics.Average().ToString();
-            textBlock12.Text = currencyStatistics.HighestValue().ToString();
-            textBlock13.Text = currencyStatistics.LowestValue().ToString();
-            textBlock14.Text = currencyStatistics.LongestSeriesOfGrowth().ToString() + " dni";
-            textBlock15.Text = currencyStatistics.LongestSeriesOfInheritance().ToString() + " dni";
-            textBlock16.Text = currencyStatistics.BiggestIncrease().ToString();
-            textBlock17.Text = currencyStatistics.BiggestDrop().ToString();
-            
         }
 
         void GetStatistic(string name, int quantity)
         {
             listView.Items.Clear();
             CurrencyStatistics currencyStatistics = new CurrencyStatistics(name, quantity);
+            currencyStatistics.OneCurrencyForStatistics.Reverse();
             foreach (var item in currencyStatistics.OneCurrencyForStatistics)
             {
                 listView.Items.Add(item);
@@ -62,6 +46,7 @@ namespace CurrencyConverterRemastered
             textBlock15.Text = currencyStatistics.LongestSeriesOfInheritance().ToString() + " dni";
             textBlock16.Text = currencyStatistics.BiggestIncrease().ToString();
             textBlock17.Text = currencyStatistics.BiggestDrop().ToString();
+            groupBox.Header = "Statystyki z " + quantity + " dni";
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
