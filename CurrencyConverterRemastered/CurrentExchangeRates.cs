@@ -13,6 +13,8 @@ namespace CurrencyConverterRemastered
 {
     class CurrentExchangeRates : ICourse
     {
+
+
         public string Data { get; set; }
         public List<Currency> Currencies { get; set; }
         public List<CurrencieName> CurrencieNames { get; set; }
